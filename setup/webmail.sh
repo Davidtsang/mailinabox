@@ -170,7 +170,7 @@ cp ${RCM_PLUGIN_DIR}/password/config.inc.php.dist \
 
 tools/editconf.py ${RCM_PLUGIN_DIR}/password/config.inc.php \
 	"\$config['password_minimum_length']=8;" \
-	"\$config['password_db_dsn']='sqlite:///$STORAGE_ROOT/mail/users.sqlite';" \
+	"\$config['password_db_dsn']='postgres://mailreader:@localhost:5432/mail';" \
 	"\$config['password_query']='UPDATE users SET password=%D WHERE email=%u';" \
 	"\$config['password_dovecotpw']='/usr/bin/doveadm pw';" \
 	"\$config['password_dovecotpw_method']='SHA512-CRYPT';" \
@@ -181,10 +181,10 @@ usermod -a -G dovecot www-data
 
 # set permissions so that PHP can use users.sqlite
 # could use dovecot instead of www-data, but not sure it matters
-chown root.www-data $STORAGE_ROOT/mail
-chmod 775 $STORAGE_ROOT/mail
-chown root.www-data $STORAGE_ROOT/mail/users.sqlite
-chmod 664 $STORAGE_ROOT/mail/users.sqlite
+#chown root.www-data $STORAGE_ROOT/mail
+#chmod 775 $STORAGE_ROOT/mail
+#chown root.www-data $STORAGE_ROOT/mail/users.sqlite
+#chmod 664 $STORAGE_ROOT/mail/users.sqlite
 
 # Fix Carddav permissions:
 chown -f -R root.www-data ${RCM_PLUGIN_DIR}/carddav
@@ -192,9 +192,9 @@ chown -f -R root.www-data ${RCM_PLUGIN_DIR}/carddav
 chmod -R 774 ${RCM_PLUGIN_DIR}/carddav
 
 # Run Roundcube database migration script (database is created if it does not exist)
-${RCM_DIR}/bin/updatedb.sh --dir ${RCM_DIR}/SQL --package roundcube
-chown www-data:www-data $STORAGE_ROOT/mail/roundcube/roundcube.sqlite
-chmod 664 $STORAGE_ROOT/mail/roundcube/roundcube.sqlite
+#${RCM_DIR}/bin/updatedb.sh --dir ${RCM_DIR}/SQL --package roundcube
+#chown www-data:www-data $STORAGE_ROOT/mail/roundcube/roundcube.sqlite
+#chmod 664 $STORAGE_ROOT/mail/roundcube/roundcube.sqlite
 
 # Enable PHP modules.
 phpenmod -v php mcrypt imap
